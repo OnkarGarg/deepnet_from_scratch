@@ -1,13 +1,12 @@
 import numpy as np
-from Activations.Activations import relu, relu_derivative
 
 class DenseLayer:
     def __init__(self, input_size, output_size):
         self._input_size = input_size
         self._output_size = output_size
-        self._input = np.random.rand(self._input_size)
-        self._bias = np.random.rand(self._output_size)
-        self._weights = np.random.rand(self._output_size, self._input_size)
+        self._input = np.ones(self._input_size)
+        self._bias = np.ones(self._output_size)
+        self._weights = np.ones((self._output_size, self._input_size))
 
     @property
     def input(self):
@@ -41,9 +40,18 @@ class DenseLayer:
     def weights(self, weights):
         self._weights = weights
 
-    def output(self, activation):
-        if activation == "RELU":
-            return relu(np.dot(self._weights, self._input) + self._bias)
+    def output(self):
+            return np.dot(self._weights, self._input) + self._bias
+
+
+    def outputs(self, inputs):
+        if np.size(self._input) != np.size(inputs[0]):
+            return None
+        outputs = []
+        for vec in inputs:
+            self._input = vec
+            outputs.append(self.output())
+        return np.vstack(outputs)
 
     def __str__(self):
         return "Bias: " + np.array_str(self._bias) + "\nWeights: " + np.array_str(self._weights)
