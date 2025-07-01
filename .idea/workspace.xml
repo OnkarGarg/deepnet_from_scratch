@@ -4,21 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ce1b320-766b-4333-968d-22dafd60b46e" name="Changes" comment="Currently testing DenseLayer class">
-      <change afterPath="$PROJECT_DIR$/V1/Training.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/V1/playground.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/V2/DenseLayer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/V2/Playground.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/V2/Playground2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/Concrete_Data.xls" afterDir="false" />
+    <list default="true" id="1ce1b320-766b-4333-968d-22dafd60b46e" name="Changes" comment="V2 - base working model">
+      <change afterPath="$PROJECT_DIR$/V2/DropoutLayer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/V2/Model.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/V2/Playground3.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Activations/Activations.py" beforeDir="false" afterPath="$PROJECT_DIR$/V1/Activations/Activations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Layers/DenseLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/V1/Layers/DenseLayer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Layers/InputLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/V1/Layers/InputLayer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Layers/Layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/V1/Layers/Layer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Layers/OutputLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/V1/Layers/OutputLayer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Net.py" beforeDir="false" afterPath="$PROJECT_DIR$/V1/Net.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/V2/Playground2.py" beforeDir="false" afterPath="$PROJECT_DIR$/V2/Playground2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,21 +26,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "OnkarGarg"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;OnkarGarg&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/OnkarGarg/deepnet_from_scratch.git",
-    "accountId": "df6a842a-0a71-4567-9590-64d6e579e966"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/OnkarGarg/deepnet_from_scratch.git&quot;,
+    &quot;accountId&quot;: &quot;df6a842a-0a71-4567-9590-64d6e579e966&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2yx4qNB5V0E7jeRsfhonG1atDAj" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -60,12 +51,13 @@
   "keyToString": {
     "Python.Playground.executor": "Run",
     "Python.Playground2.executor": "Run",
+    "Python.Playground3.executor": "Run",
     "Python.Training.executor": "Run",
     "Python.main.executor": "Run",
     "Python.playground.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "last_opened_file_path": "C:/Users/onkar/PycharmProjects/deepnet_from_scratch/V2",
-    "settings.editor.selected.configurable": "preferences.fileTypes"
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -80,7 +72,7 @@
       <recent name="C:\Users\onkar\PycharmProjects\deepnet_from_scratch\Layers" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Playground2">
+  <component name="RunManager" selected="Python.Playground3">
     <configuration name="Playground" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="deepnet_from_scratch" />
       <option name="ENV_FILES" value="" />
@@ -117,6 +109,28 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/V2/Playground2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Playground3" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="deepnet_from_scratch" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/V2" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/V2/Playground3.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -171,6 +185,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Playground3" />
         <item itemvalue="Python.Playground2" />
         <item itemvalue="Python.Playground" />
         <item itemvalue="Python.Training" />
@@ -241,7 +256,31 @@
       <option name="project" value="LOCAL" />
       <updated>1750796612134</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="updates">
+      <option name="closed" value="true" />
+      <created>1751304638624</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1751304638624</updated>
+    </task>
+    <task id="LOCAL-00008" summary="loaded data">
+      <option name="closed" value="true" />
+      <created>1751304650017</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1751304650017</updated>
+    </task>
+    <task id="LOCAL-00009" summary="V2 - base working model">
+      <option name="closed" value="true" />
+      <created>1751304672368</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1751304672368</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -262,6 +301,9 @@
     <MESSAGE value="." />
     <MESSAGE value="Added Relu" />
     <MESSAGE value="Currently testing DenseLayer class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Currently testing DenseLayer class" />
+    <MESSAGE value="updates" />
+    <MESSAGE value="loaded data" />
+    <MESSAGE value="V2 - base working model" />
+    <option name="LAST_COMMIT_MESSAGE" value="V2 - base working model" />
   </component>
 </project>

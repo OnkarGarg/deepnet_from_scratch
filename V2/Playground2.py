@@ -47,7 +47,6 @@ for i in range(epochs):
     layer4.input = layer3.output()
     layer5.input = layer4.output()
 
-
     layer1.train_layer(0.00001,
                        layer2.train_layer(0.00001,
                                           layer3.train_layer(0.0001,
@@ -75,11 +74,11 @@ for i in range(epochs):
     val_line.set_xdata(iteration)
     val_line.set_ydata(validation_errors)
 
-    ax.relim()           # Recalculate limits
+    ax.relim()  # Recalculate limits
     ax.autoscale_view()  # Autoscale the axes
 
     plt.draw()
-    plt.pause(0.0000005)      # Short pause to allow update (animation effect)
+    plt.pause(0.0000005)  # Short pause to allow update (animation effect)
 
 plt.ioff()  # Turn off interactive mode
 plt.show()
