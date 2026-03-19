@@ -33,7 +33,15 @@ class Model:
         # print(f"self._layers[{index}].train_layer(learning_rates[{index}], self.train_model(y_train, learning_rates, {index + 1}))")
         return self._layers[index].train_layer(learning_rates[index], dy=self._train_layers(y_train, learning_rates, index + 1))
 
-    def train_model(self, x_train, y_train, learning_rates, epochs, x_val=None, y_val=None, graphing=False):
+    def train_model(self, x_train, y_train, learning_rate, epochs, x_val=None, y_val=None, graphing=False):
+
+        if type(learning_rate) is type([]):
+            pass
+        elif type(learning_rate) is type(0.0) or type(learning_rate) is type(0):
+            learning_rate = [learning_rate] * len(self._layers)
+        else:
+            print(type(learning_rate), type([]), type(0.0), type(0))
+            raise TypeError("Learning rate can only be a list of learning rates for the layers or can be a float/int if you want the same learning rate for all the layers")
 
         iteration = []
         train_errors = []
@@ -42,14 +50,18 @@ class Model:
         if graphing:
             plt.ion()
             fig, ax = plt.subplots()
-            train_line, = ax.plot([], [], 'bo-', label='Train')  # blue
-            val_line, = ax.plot([], [], 'ro-', label='Validation')  # red
+            ax.set_yscale('log')
+            ax.set_ylabel("Error")
+            ax.set_xlabel("Epochs")
+            train_line, = ax.plot([], [], 'bo-', label='Train')
+            val_line, = ax.plot([], [], 'ro-', label='Validation')
+            ax.legend()
 
         for i in range(epochs):
             self._layers[0].input = x_train
             self._connect_layers(True)
 
-            self._train_layers(y_train, learning_rates)
+            self._train_layers(y_train, learning_rate)
             train_error = np.sum(mse(self._layers[-1].output(), y_train))
 
             self._layers[0].input = x_val
@@ -65,20 +77,18 @@ class Model:
             if graphing:
                 train_line.set_xdata(iteration)
                 train_line.set_ydata(train_errors)
-
                 val_line.set_xdata(iteration)
                 val_line.set_ydata(validation_errors)
-
-                ax.relim()  # Recalculate limits
-                ax.autoscale_view()  # Autoscale the axes
-
+                ax.relim()
+                ax.autoscale_view()
                 plt.draw()
-                plt.pause(0.0000005)  # Short pause to allow update (animation effect)
+                plt.pause(0.01)
 
         if graphing:
-            plt.ioff()  # Turn off interactive mode
-            plt.show()
+            plt.ioff()
 
-        plt.loglog(iteration, train_errors)
-        plt.loglog(iteration, validation_errors)
+        fig2, ax2 = plt.subplots()
+        ax2.loglog(iteration, train_errors, label='Train')
+        ax2.loglog(iteration, validation_errors, label='Validation')
+        ax2.legend()
         plt.show()

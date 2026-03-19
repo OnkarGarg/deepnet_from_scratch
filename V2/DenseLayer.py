@@ -6,10 +6,20 @@ from Losses import mse_derivative
 
 
 class DenseLayer(Layer):
-    def __init__(self, input_size, output_size, activation=None):
+    def __init__(self, input_size, output_size, activation=None, weights_initialization=None):
         super().__init__(input_size, output_size)
         self._bias = np.zeros(output_size)  # m
         self._weights = np.random.normal(0, np.sqrt(2/input_size), (output_size, input_size))  # m x n
+
+        
+        if weights_initialization == "he_normal":
+            self._weights = np.random.normal(0, np.sqrt(2/self._input_size), (self._output_size, self._input_size))
+        elif weights_initialization == "he_uniform":
+            self._weights = np.random.uniform(np.sqrt(-6/self._input_size), np.sqrt(6/self._input_size), ((self._output_size, self._input_size)))
+        elif weights_initialization == "xavier" or weights_initialization == "glorot":
+            self._weights = np.random.normal(0, np.sqrt(2/(self._input_size + self._output_size)), (self._output_size, self._input_size))
+        else:
+            self._weights = np.ones((self._output_size, self._input_size))
 
         if activation is None:
             self._activation = linear
