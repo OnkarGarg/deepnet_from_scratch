@@ -8,7 +8,8 @@ class DropoutLayer(Layer):
         super().__init__(input_size, output_size)
         self._prob = dropout_prob
         self._mask = np.random.binomial(1, 1 - dropout_prob, output_size)
-        print(self._mask)
+        self._connection = "direct"
+        # print(self._mask)
 
     def __str__(self):
         return (f"Dropout Layer\n\tInput: {self._input_size}\n"

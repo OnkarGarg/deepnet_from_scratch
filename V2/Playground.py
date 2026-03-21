@@ -3,7 +3,8 @@ import numpy as np
 import pandas as pd
 import os
 
-from DenseLayer import DenseLayer, mse
+from Losses import mse
+from DenseLayer import DenseLayer
 
 file_path = os.path.join("..", "data", "Concrete_Data.xls")
 

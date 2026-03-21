@@ -7,6 +7,9 @@ class Layer:
     def __str__(self):
         pass
 
+    def __layer_name__(self):
+        return type(self).__name__
+
     @property
     def input(self):
         return self._input

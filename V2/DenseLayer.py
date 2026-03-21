@@ -10,6 +10,7 @@ class DenseLayer(Layer):
         super().__init__(input_size, output_size)
         self._bias = np.zeros(output_size)  # m
         self._weights = np.random.normal(0, np.sqrt(2/input_size), (output_size, input_size))  # m x n
+        self._connection = "full"
 
         
         if weights_initialization == "he_normal":
