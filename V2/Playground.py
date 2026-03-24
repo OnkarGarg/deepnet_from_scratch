@@ -55,6 +55,6 @@ for i in range(epochs):
     plt.pause(0.01)      # Short pause to allow update (animation effect)
 
 plt.ioff()  # Turn off interactive mode
-plt.show()
+plt.show(block=False)
 
 print(layer.output())

@@ -81,4 +81,4 @@ for i in range(epochs):
     plt.pause(0.0000005)  # Short pause to allow update (animation effect)
 
 plt.ioff()  # Turn off interactive mode
-plt.show()
+plt.show(block=False)
