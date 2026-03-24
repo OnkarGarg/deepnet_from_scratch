@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from DenseLayer import DenseLayer
 from DropoutLayer import DropoutLayer
 from Model import Model
+from Activations import *
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 file_path = os.path.join(base_dir, '..', 'data', 'Concrete_Data.xls')
@@ -29,13 +30,13 @@ print(x_train[0], y_train[0])
 
 learning_rates = [0.00001, 0.00001, 0.00001, 0.00001, 0.00001, 0.00001]
 
-base_model = Model([DenseLayer(8, 64, "relu", "he_normal"),
-               DenseLayer(64, 32, "relu", "he_normal"),
+base_model = Model([DenseLayer(8, 64, Relu(), "he_normal"),
+               DenseLayer(64, 32, Relu(), "he_normal"),
             #    DropoutLayer(32, 32, 0.2),
-               DenseLayer(32, 64, "relu", "he_normal"),
-               DenseLayer(64, 8, "relu", "he_normal"),
-               DenseLayer(8, 4, "relu", "he_normal"),
-               DenseLayer(4, 1, "linear", "he_normal")])
+               DenseLayer(32, 64, Relu(), "he_normal"),
+               DenseLayer(64, 8, Relu(), "he_normal"),
+               DenseLayer(8, 4, Relu(), "he_normal"),
+               DenseLayer(4, 1, Linear(), "he_normal")])
 
 # model1 = copy.deepcopy(base_model)
 # model2 = copy.deepcopy(base_model)

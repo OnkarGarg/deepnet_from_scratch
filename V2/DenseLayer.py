@@ -1,6 +1,6 @@
 import numpy as np
 
-from Activations import relu, relu_derivative, linear_derivative, linear
+# from Activations import Relu, linear
 from Layer import Layer
 from Losses import mse_derivative
 
@@ -29,15 +29,18 @@ class DenseLayer(Layer):
         else:
             self._weights = np.ones((self._output_size, self._input_size))
 
-        if activation is None:
-            self._activation = linear
-            self._activation_derivative = linear_derivative
-        elif activation.lower() == "relu":
-            self._activation = relu
-            self._activation_derivative = relu_derivative
-        elif activation.lower() == "linear":
-            self._activation = linear
-            self._activation_derivative = linear_derivative
+        # if activation is None:
+        #     self._activation = linear
+        #     self._activation_derivative = linear_derivative
+        # elif activation.lower() == "relu":
+        #     self._activation = relu
+        #     self._activation_derivative = relu_derivative
+        # elif activation.lower() == "linear":
+        #     self._activation = linear
+        #     self._activation_derivative = linear_derivative
+
+        self._activation = activation.function
+        self._activation_derivative = activation.function_derivative
 
     def __str__(self):
         return (f"Dense Layer\n\tInput: {self._input_size}\n"
