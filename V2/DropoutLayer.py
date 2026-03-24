@@ -31,7 +31,7 @@ class DropoutLayer(Layer):
     def mask(self, mask):
         self._mask = mask
 
-    def train_layer(self, learning_rate, y_real=None, dy=None):
+    def train_layer(self, learning_rate, y_real=None, optimizer=None, velocity_decay=None, momentum_decay=None, dy=None):
         return (dy/(1 - self._prob)) * self._mask
 
     def output(self, training=False):

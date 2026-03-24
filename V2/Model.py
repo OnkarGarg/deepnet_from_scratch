@@ -9,15 +9,6 @@ class Model:
             self._layers = list()
         else:
             self._layers = layers
-        # self._inputs = None
-
-    # @property
-    # def inputs(self):
-    #     return self._inputs
-    #
-    # @inputs.setter
-    # def inputs(self, inputs):
-    #     self._inputs = inputs
 
     def add_layer(self, layer):
         self._layers.append(layer)
@@ -26,14 +17,14 @@ class Model:
         for i in range(1, len(self._layers)):
             self._layers[i].input = self._layers[i-1].output(training)
 
-    def _train_layers(self, y_train, learning_rates, index=0):
+    def _train_layers(self, y_train, learning_rates, optimizer, index=0, velocity_decay=0.9, momentum_decay=0.999):
         if index == len(self._layers) - 1:
             # print(f"self._layers[{index}].train_layer(learning_rates[{index}], y_train)")
-            return self._layers[index].train_layer(learning_rates[index], y_train)
+            return self._layers[index].train_layer(learning_rates[index], y_train, optimizer, velocity_decay, momentum_decay)
         # print(f"self._layers[{index}].train_layer(learning_rates[{index}], self.train_model(y_train, learning_rates, {index + 1}))")
-        return self._layers[index].train_layer(learning_rates[index], dy=self._train_layers(y_train, learning_rates, index + 1))
+        return self._layers[index].train_layer(learning_rates[index], optimizer=optimizer, velocity_decay=velocity_decay, momentum_decay=momentum_decay, dy=self._train_layers(y_train, learning_rates, optimizer, index + 1, velocity_decay, momentum_decay))
 
-    def train_model(self, x_train, y_train, learning_rate, epochs, x_val=None, y_val=None, graphing=False):
+    def train_model(self, x_train, y_train, learning_rate, epochs, x_val=None, y_val=None, optimizer=None, velocity_decay=0.9, momentum_decay=0.999, graphing=False):
 
         if type(learning_rate) is type([]):
             pass
@@ -55,13 +46,14 @@ class Model:
             ax.set_xlabel("Epochs")
             train_line, = ax.plot([], [], 'bo-', label='Train')
             val_line, = ax.plot([], [], 'ro-', label='Validation')
+            ax.set_title(f"{optimizer}")
             ax.legend()
 
         for i in range(epochs):
             self._layers[0].input = x_train
             self._connect_layers(training=True)
 
-            self._train_layers(y_train, learning_rate)
+            self._train_layers(y_train, learning_rate, optimizer, velocity_decay=velocity_decay, momentum_decay=momentum_decay)
             train_error = np.sum(mse(self._layers[-1].output(), y_train))
 
             self._layers[0].input = x_val
@@ -72,7 +64,7 @@ class Model:
             train_errors.append(train_error)
             validation_errors.append(validation_error)
 
-            print(train_error, validation_error)
+            print(f"{i}:", train_error, validation_error)
 
             if graphing:
                 train_line.set_xdata(iteration)
@@ -87,11 +79,14 @@ class Model:
         if graphing:
             plt.ioff()
 
-        fig2, ax2 = plt.subplots()
-        ax2.loglog(iteration, train_errors, label='Train')
-        ax2.loglog(iteration, validation_errors, label='Validation')
-        ax2.legend()
-        plt.show()
+            fig2, ax2 = plt.subplots()
+            ax2.loglog(iteration, train_errors, label='Train')
+            ax2.loglog(iteration, validation_errors, label='Validation')
+            ax2.legend()
+            ax2.set_title(f"{optimizer}")
+            plt.show(block=False)
+
+        return (train_errors, validation_errors)
 
     def predict(self, x):
             self._layers[0].input = x
@@ -167,7 +162,7 @@ class Model:
         ax.margins(0.1)
         
         plt.tight_layout()
-        plt.show()
+        plt.show(block=False)
 
     # def draw_model(self):
 

@@ -11,8 +11,15 @@ class DenseLayer(Layer):
         self._bias = np.zeros(output_size)  # m
         self._weights = np.random.normal(0, np.sqrt(2/input_size), (output_size, input_size))  # m x n
         self._connection = "full"
+    
+        self._prev_for_weights = 0
+        self._prev_for_bias = 0
 
-        
+        self._prev_for_weights2 = 0
+        self._prev_for_bias2 = 0
+
+        self._step = 0
+
         if weights_initialization == "he_normal":
             self._weights = np.random.normal(0, np.sqrt(2/self._input_size), (self._output_size, self._input_size))
         elif weights_initialization == "he_uniform":
@@ -61,7 +68,7 @@ class DenseLayer(Layer):
     def bias(self, bias):
         self._bias = bias
 
-    def train_layer(self, learning_rate, y_real=None, dy=None):
+    def train_layer(self, learning_rate, y_real=None, optimizer=None, velocity_decay=0.999, momentum_decay=0.9, dy=None):
         y_pred = self.output()
         da = self._activation_derivative(y_pred)
 
@@ -76,8 +83,35 @@ class DenseLayer(Layer):
         dw = np.clip(dw, -max_grad, max_grad)
         db = np.clip(db, -max_grad, max_grad)
 
-        self._weights -= dw * learning_rate
-        self._bias -= db * learning_rate
+        if optimizer == "adagrad":
+            self._prev_for_weights += dw * dw
+            self._weights -= learning_rate * (dw/(np.sqrt(self._prev_for_weights) + 1e-6))
+
+            self._prev_for_bias += db * db
+            self._bias -= learning_rate * (db/(np.sqrt(self._prev_for_bias) + 1e-6))
+
+        elif optimizer == "rmsprop":
+            self._prev_for_weights = velocity_decay * self._prev_for_weights + (1-velocity_decay) * dw * dw
+            self._weights -= learning_rate * (dw/(np.sqrt(self._prev_for_weights) + 1e-6))
+
+            self._prev_for_bias = velocity_decay * self._prev_for_bias + (1-velocity_decay) * db * db
+            self._bias -= learning_rate * (db/(np.sqrt(self._prev_for_bias) + 1e-6))
+
+        elif optimizer == "adam":
+            self._step += 1
+            learning_rate *= np.sqrt(1 - velocity_decay**self._step) / (1 - momentum_decay**self._step)
+
+            self._prev_for_weights2 = momentum_decay * self._prev_for_weights2 + (1 - momentum_decay) * dw
+            self._prev_for_weights = velocity_decay * self._prev_for_weights + (1-velocity_decay) * dw * dw
+            self._weights -= learning_rate * (self._prev_for_weights2/(np.sqrt(self._prev_for_weights) + 1e-6))
+
+            self._prev_for_bias2 = momentum_decay * self._prev_for_bias2 + (1 - momentum_decay) * db
+            self._prev_for_bias = velocity_decay*self._prev_for_bias + (1-velocity_decay) * db * db
+            self._bias -= learning_rate * (self._prev_for_bias2/(np.sqrt(self._prev_for_bias) + 1e-6))
+
+        else:
+            self._weights -= dw * learning_rate
+            self._bias -= db * learning_rate
 
         return dx
 

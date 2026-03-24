@@ -33,11 +33,11 @@ model = Model([DenseLayer(8, 64, "relu", "he_normal"),
                DenseLayer(8, 4, "relu", "he_normal"),
                DenseLayer(4, 1, "linear", "he_normal")])
 
-model.draw_model()
+# model.draw_model()
 
 learning_rates = [0.00001, 0.00001, 0, 0.00001, 0.00001, 0.00001, 0.00001]
 
-model.train_model(x_train, y_train, learning_rates, 10000, x_val, y_val)
+model.train_model(x_train, y_train, learning_rates, 10000, x_val, y_val, optimizer="adagrad", graphing=True)
 
 
 test_input = np.array((3.47791782, 0.85688631, -0.85713204, -0.91866329, -0.62922529, 0.86916012, -1.91765845, -0.29973311))
