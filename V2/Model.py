@@ -17,12 +17,20 @@ class Model:
         for i in range(1, len(self._layers)):
             self._layers[i].input = self._layers[i-1].output(training)
 
-    def _train_layers(self, y_train, learning_rates, optimizer, index=0):
-        if index == len(self._layers) - 1:
-            return self._layers[index].train_layer(learning_rates[index], y_train, optimizer)
-        return self._layers[index].train_layer(learning_rates[index], optimizer=optimizer, dy=self._train_layers(y_train, learning_rates, optimizer, index + 1))
+    def _train_layers(self, y_train, learning_rates, optimizer, scheduler, index=0):
+        if scheduler:
+            if index == len(self._layers) - 1:
+                return self._layers[index].train_layer(scheduler._learning_rates[index], y_train, optimizer)
+            return self._layers[index].train_layer(scheduler._learning_rates[index], optimizer=optimizer, dy=self._train_layers(y_train, learning_rates, optimizer, scheduler, index + 1))
+        else:
+            if index == len(self._layers) - 1:
+                return self._layers[index].train_layer(learning_rates[index], y_train, optimizer)
+            return self._layers[index].train_layer(learning_rates[index], optimizer=optimizer, dy=self._train_layers(y_train, learning_rates, optimizer, scheduler, index + 1))
 
-    def train_model(self, x_train, y_train, learning_rate, epochs, x_val=None, y_val=None, optimizer=None, graphing=False):
+    def train_model(self, x_train, y_train, learning_rate, epochs, x_val=None, y_val=None, optimizer=None, scheduler=None, graphing=False):
+    
+        if scheduler:
+            scheduler.check(len(self._layers))
 
         if type(learning_rate) is type([]):
             pass
@@ -51,7 +59,7 @@ class Model:
             self._layers[0].input = x_train
             self._connect_layers(training=True)
 
-            self._train_layers(y_train, learning_rate, optimizer)
+            self._train_layers(y_train, learning_rate, optimizer, scheduler)
             train_error = np.sum(mse(self._layers[-1].output(), y_train))
 
             self._layers[0].input = x_val
@@ -61,6 +69,8 @@ class Model:
             iteration.append(i)
             train_errors.append(train_error)
             validation_errors.append(validation_error)
+            if scheduler:
+                scheduler.update(validation_error)
 
             print(f"{i}:", train_error, validation_error)
 

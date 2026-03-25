@@ -10,6 +10,7 @@ from DropoutLayer import DropoutLayer
 from Model import Model
 from Activations import *
 from Optimizer import *
+from LRScheduler import *
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 file_path = os.path.join(base_dir, '..', 'data', 'Concrete_Data.xls')
@@ -29,11 +30,11 @@ y_train, y_val = y[:split_idx], y[split_idx:]
 
 print(x_train[0], y_train[0])
 
-learning_rates = [0.00001, 0.00001, 0.00001, 0.00001, 0.00001, 0.00001]
+learning_rates = [0.00001, 0.00001, 0, 0.00001, 0.00001, 0.00001, 0.00001]
 
 base_model = Model([DenseLayer(8, 64, Relu(), "he_normal"),
                DenseLayer(64, 32, Relu(), "he_normal"),
-            #    DropoutLayer(32, 32, 0.2),
+               DropoutLayer(32, 32, 0.2),
                DenseLayer(32, 64, Relu(), "he_normal"),
                DenseLayer(64, 8, Relu(), "he_normal"),
                DenseLayer(8, 4, Relu(), "he_normal"),
@@ -54,9 +55,10 @@ for (name, optimizer), model in zip(experiments, models):
     train_errors, val_errors = model.train_model(
         x_train, y_train,
         learning_rates,
-        5000,
+        25000,
         x_val, y_val,
         optimizer=optimizer,
+        scheduler=None,
         graphing=False
     )
     histories[name] = (train_errors, val_errors)

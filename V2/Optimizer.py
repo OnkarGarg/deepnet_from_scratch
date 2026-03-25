@@ -14,9 +14,6 @@ class AdaGrad(Optimizer):
     def __init__(self):
         super().__init__()
 
-        # self._accumulated_squared_weights_grads = 0
-        # self._accumulated_squared_bias_grads = 0
-
         self._accumulated_squared_grads = {}
 
 
@@ -30,15 +27,6 @@ class AdaGrad(Optimizer):
                 'w': np.zeros_like(dw),
                 'b': np.zeros_like(db)
             }
-        # print(dw)
-        # assert not np.any(np.isnan(dw)), "NaN in dw"
-        # assert not np.any(np.isnan(db)), "NaN in db"
-
-        # self._accumulated_squared_weights_grads += dw * dw
-        # weights = learning_rate * (dw/(np.sqrt(self._accumulated_squared_weights_grads) + 1e-6))
-
-        # self._accumulated_squared_bias_grads += db * db
-        # bias = learning_rate * (db/(np.sqrt(self._accumulated_squared_bias_grads) + 1e-6))
 
         self._accumulated_squared_grads[layer_id]['w'] += dw * dw
         weights = learning_rate * (dw/(np.sqrt(self._accumulated_squared_grads[layer_id]['w']) + 1e-6))
@@ -54,8 +42,6 @@ class RMSProp(Optimizer):
         super().__init__()
 
         self._velocity_decay = velocity_decay
-        # self._weights_velocity = 0
-        # self._bias_velocity = 0
 
         self._velocities = {}
 
@@ -87,14 +73,8 @@ class Adam(Optimizer):
         self._velocity_decay = velocity_decay
         self._momentum_decay = momentum_decay
 
-        # self._weights_velocity = 0
-        # self._bias_velocity = 0
-
         self._velocities = {}
         self._momentums = {}
-
-        # self._weights_momentum = 0
-        # self._bias_momentum = 0
 
     def __str__(self):
         return "Adam"
