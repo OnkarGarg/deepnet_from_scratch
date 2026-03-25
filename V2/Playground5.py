@@ -9,6 +9,7 @@ from DenseLayer import DenseLayer
 from DropoutLayer import DropoutLayer
 from Model import Model
 from Activations import *
+from Optimizer import *
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 file_path = os.path.join(base_dir, '..', 'data', 'Concrete_Data.xls')
@@ -38,30 +39,17 @@ base_model = Model([DenseLayer(8, 64, Relu(), "he_normal"),
                DenseLayer(8, 4, Relu(), "he_normal"),
                DenseLayer(4, 1, Linear(), "he_normal")])
 
-# model1 = copy.deepcopy(base_model)
-# model2 = copy.deepcopy(base_model)
-# model3 = copy.deepcopy(base_model)
-# model4 = copy.deepcopy(base_model)
-
-# model1.train_model(x_train, y_train, learning_rates, 1000, x_val, y_val, graphing=True)
-# model2.train_model(x_train, y_train, learning_rates, 1000, x_val, y_val, optimizer="adagrad", graphing=True)
-# model3.train_model(x_train, y_train, learning_rates, 1000, x_val, y_val, optimizer="rmsprop", graphing=True)
-# model4.train_model(x_train, y_train, learning_rates, 1000, x_val, y_val, optimizer="adam", graphing=True)
-
 experiments = [
     ("GD", None),
-    ("Adagrad", "adagrad"),
-    ("RMSprop", "rmsprop"),
-    ("Adam", "adam"),
+    ("Adagrad", AdaGrad()),
+    ("RMSprop", RMSProp()),
+    ("Adam", Adam()),
 ]
 
 models = [copy.deepcopy(base_model) for _ in experiments]
 histories = {}
 
 for (name, optimizer), model in zip(experiments, models):
-
-    # if optimizer == "adam":
-    #     learning_rates = [x / 10 for x in learning_rates]
 
     train_errors, val_errors = model.train_model(
         x_train, y_train,
