@@ -27,8 +27,11 @@ class Model:
                 return self._layers[index].train_layer(learning_rates[index], y_train, optimizer)
             return self._layers[index].train_layer(learning_rates[index], optimizer=optimizer, dy=self._train_layers(y_train, learning_rates, optimizer, scheduler, index + 1))
 
-    def train_model(self, x_train, y_train, learning_rate, epochs, x_val=None, y_val=None, optimizer=None, scheduler=None, graphing=False):
+    def train_model(self, x_train, y_train, learning_rate, epochs, x_val=None, y_val=None, optimizer=None, batch_size=None, drop_last=None, scheduler=None, graphing=False):
     
+        if batch_size is None:
+            batch_size = x_train.shape[0]
+
         if scheduler:
             scheduler.check(len(self._layers))
 
@@ -56,11 +59,13 @@ class Model:
             ax.legend()
 
         for i in range(epochs):
-            self._layers[0].input = x_train
-            self._connect_layers(training=True)
+            train_error = 0
+            for x_train_batched, y_train_batched in self.get_minibatches(x_train, y_train, batch_size, drop_last):
+                self._layers[0].input = x_train_batched
+                self._connect_layers(training=True)
 
-            self._train_layers(y_train, learning_rate, optimizer, scheduler)
-            train_error = np.sum(mse(self._layers[-1].output(), y_train))
+                self._train_layers(y_train_batched, learning_rate, optimizer, scheduler)
+                train_error += np.sum(mse(self._layers[-1].output(), y_train_batched))
 
             self._layers[0].input = x_val
             self._connect_layers(training=False)
@@ -87,14 +92,27 @@ class Model:
         if graphing:
             plt.ioff()
 
-            fig2, ax2 = plt.subplots()
-            ax2.loglog(iteration, train_errors, label='Train')
-            ax2.loglog(iteration, validation_errors, label='Validation')
-            ax2.legend()
-            ax2.set_title(f"{optimizer}")
-            plt.show(block=False)
+        fig2, ax2 = plt.subplots()
+        ax2.loglog(iteration, train_errors, label='Train')
+        ax2.loglog(iteration, validation_errors, label='Validation')
+        ax2.legend()
+        ax2.set_title(f"{optimizer}")
+        plt.show(block=(not graphing))
 
         return (train_errors, validation_errors)
+
+    def get_minibatches(self, X, y, batch_size, drop_last=False):
+        shuffler = np.random.permutation(X.shape[0])
+        X = X[shuffler, :]
+        y = y[shuffler, :]
+        end = X.shape[0]
+
+        if drop_last:
+            end -= batch_size + 1
+
+        for i in range(0, end, batch_size):
+            yield X[i:i+batch_size], y[i:i+batch_size]
+
 
     def predict(self, x):
             self._layers[0].input = x

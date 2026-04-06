@@ -5,12 +5,14 @@ from Losses import mse_derivative
 
 
 class DenseLayer(Layer):
-    def __init__(self, input_size, output_size, activation=None, weights_initialization=None):
+    def __init__(self, input_size, output_size, activation=None, weights_initialization=None, L2_strength=0, L1_strength=0):
         super().__init__(input_size, output_size)
         self._bias = np.zeros(output_size)  # m
         self._weights = np.random.normal(0, np.sqrt(2/input_size), (output_size, input_size))  # m x n
         self._connection = "full"
-    
+        self._L2_strength = L2_strength
+        self._L1_strength = L1_strength
+
         self._prev_for_weights = 0
         self._prev_for_bias = 0
 
@@ -65,9 +67,9 @@ class DenseLayer(Layer):
         da = self._activation_derivative(y_pred)
 
         if dy is None:
-            dy = mse_derivative(y_pred, y_real)
+            dy = mse_derivative(y_pred, y_real) + self._L1_strength * np.sum(self._weights, axis=1)
 
-        dw = (da * dy).transpose() @ self._input + 2 * 0.001 * self._weights
+        dw = (da * dy).transpose() @ self._input + 2 * self._L2_strength * self._weights
         db = np.sum(da * dy, axis=0)
         dx = (da * dy) @ self._weights
 
